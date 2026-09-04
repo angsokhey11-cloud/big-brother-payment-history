@@ -19,8 +19,31 @@ function resolveType(){let m='';try{m=new URLSearchParams(parent.location.search
 const TYPE=resolveType();
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function num(v){const n=Number(v);return Number.isFinite(n)?n:0}function money(v,c){return (String(c).toUpperCase()==='KHR'?'៛':'$')+num(v).toLocaleString(undefined,{minimumFractionDigits:String(c).toUpperCase()==='KHR'?0:2,maximumFractionDigits:String(c).toUpperCase()==='KHR'?0:2})}
 async function api(params){const b=new URLSearchParams();Object.entries(params).forEach(([k,v])=>b.append(k,v??''));const r=await fetch(SALES_API,{method:'POST',body:b});const t=await r.text();let d;try{d=JSON.parse(t)}catch(_){throw new Error('Server returned an invalid response.')}if(d&&d.success===false)throw new Error(d.error||'Request failed.');return d}
-function key(kind,role=ROLE){return `bb_ph_${TYPE}_${role}_${kind}`}
-function setup(){if(TYPE==='receivable'){$('title').textContent='Receivable Payment History';$('subtitle').textContent='A/R payments. Salesman access is limited to assigned Location Codes.';$('roleField').style.display='block';ROLE=localStorage.getItem('bb_ph_receivable_role')||'salesman';$('accessRole').value=ROLE}else{$('title').textContent='Payment History';$('subtitle').textContent='Payments received directly from invoice payment functions only.';$('roleField').style.display='none';ROLE='admin'}roleChanged(false)}
+function key(kind,role=ROLE){
+  if(TYPE==='receivable'){
+    if(role==='salesman') return kind==='session'?'bb_ar_salesman_session':'bb_ar_salesman_device';
+    return kind==='session'?'bb_ar_admin_session':'bb_ar_admin_device';
+  }
+  return `bb_ph_${TYPE}_${role}_${kind}`;
+}
+function setup(){
+  if(TYPE==='receivable'){
+    $('title').textContent='Receivable Payment History';
+    $('subtitle').textContent='A/R payments. Salesman access is limited to assigned Location Codes.';
+    $('roleField').style.display='block';
+    const savedRole=localStorage.getItem('bb_ph_receivable_role')||'salesman';
+    const hasSalesman=!!(sessionStorage.getItem('bb_ar_salesman_session')||localStorage.getItem('bb_ar_salesman_device'));
+    const hasAdmin=!!(sessionStorage.getItem('bb_ar_admin_session')||localStorage.getItem('bb_ar_admin_device'));
+    ROLE=hasSalesman?'salesman':(hasAdmin?'admin':savedRole);
+    $('accessRole').value=ROLE;
+  }else{
+    $('title').textContent='Payment History';
+    $('subtitle').textContent='Payments received directly from invoice payment functions only.';
+    $('roleField').style.display='none';
+    ROLE='admin';
+  }
+  roleChanged(false);
+}
 function roleChanged(clear=true){if(TYPE==='invoice')ROLE='admin';else ROLE=$('accessRole').value||'salesman';if(TYPE==='receivable')localStorage.setItem('bb_ph_receivable_role',ROLE);if(clear){sessionToken='';deviceToken=''}$('loginTitle').textContent=ROLE==='admin'?'🔐 Admin Access':'🔐 Salesman Access';$('loginText').textContent=TYPE==='receivable'?(ROLE==='admin'?'View all Receivable payments.':'Only payments from your assigned Location Codes will be shown.'):'Payment History contains company accounting information.';$('codeLabel').textContent=ROLE==='admin'?'Admin Code':'Salesman Code';$('code').placeholder=ROLE==='admin'?'Enter Admin Code':'Enter Salesman Code';$('accessPill').textContent=ROLE==='admin'?'Admin Access':'Salesman Access'}
 function err(x=''){$('error').textContent=x;$('error').classList.toggle('show',!!x)}
 async function login(){const code=$('code').value.trim(),remember=$('remember').checked;if(!code)return err(`${ROLE==='admin'?'Admin':'Salesman'} Code is required.`);err('');try{const d=ROLE==='admin'?await api({action:'arAdminLogin',adminCode:code,rememberDevice:remember}):await api({action:'arLogin',salesmanCode:code,rememberDevice:remember});sessionToken=d.sessionToken;sessionStorage.setItem(key('session'),sessionToken);if(remember&&d.deviceToken){deviceToken=d.deviceToken;localStorage.setItem(key('device'),deviceToken)}$('code').value='';$('loginOverlay').classList.add('hidden');$('logoutBtn').hidden=false;$('accessPill').textContent=d.adminName||d.salesmanName||(ROLE==='admin'?'Admin':'Salesman');await loadHistory()}catch(e){err(e.message)}}
