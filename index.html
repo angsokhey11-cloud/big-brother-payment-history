@@ -118,7 +118,14 @@ async function openPaymentSummary(){
     const to=$('dateTo').value||dates[dates.length-1]||from;
     const selectedLoc=$('location').value.trim();
     const locations=selectedLoc?[selectedLoc]:[...new Set(picked.map(r=>String(r.locationCode||'').trim()).filter(x=>x&&x!=='MULTI'))];
-    const credit=await api({action:'salesCreditSummary',sessionToken,dateFrom:from,dateTo:to,locationCodes:JSON.stringify(locations)});
+    // Credit must come ONLY from invoices represented by the checked payment rows.
+    // Include direct invoiceNo plus any invoice numbers carried by batch/allocation rows.
+    const selectedInvoiceNos=[...new Set(picked.flatMap(r=>{
+      const direct=String(r.invoiceNo||'').trim();
+      const allocated=Array.isArray(r.allocatedInvoices)?r.allocatedInvoices:[];
+      return [direct,...allocated].map(v=>String(v||'').trim()).filter(Boolean);
+    }))];
+    const credit=await api({action:'salesCreditSummary',sessionToken,invoiceNos:JSON.stringify(selectedInvoiceNos)});
     buildPaymentSummary(picked,credit?.credit||{});
     $('summaryOverlay').classList.remove('hidden');
   }catch(e){alert(e.message||'Could not prepare payment summary.')}finally{btn.disabled=false;btn.textContent=old;updateSummaryControls()}
@@ -134,7 +141,7 @@ function buildPaymentSummary(picked,creditTotals){
   const currencies=[...new Set([...Object.keys(paid),...Object.keys(creditTotals||{})])].filter(c=>num(paid[c]?.cash)+num(paid[c]?.bank)+num(creditTotals?.[c])!==0);
   const dates=picked.map(r=>String(r.paymentDate||'').slice(0,10)).filter(Boolean).sort();const from=$('dateFrom').value||dates[0]||'-',to=$('dateTo').value||dates[dates.length-1]||'-';
   const locLabel=$('location').value||[...new Set(picked.map(r=>r.locationCode).filter(Boolean))].join(', ')||'All selected locations';
-  const totalsHtml=currencies.map(c=>{const cash=num(paid[c]?.cash),bank=num(paid[c]?.bank),credit=num(creditTotals?.[c]),sale=cash+credit,deposit=cash;return `<tr class="section"><td colspan="2">${esc(c)} SUMMARY</td></tr><tr><td>Total Paid in Cash</td><td>${money(cash,c)}</td></tr><tr><td>Total Paid in Bank</td><td>${money(bank,c)}</td></tr><tr><td>Total Credit</td><td>${money(credit,c)}</td></tr><tr class="grand"><td>Total Sale<br><span class="sumformula">Cash + Credit</span></td><td>${money(sale,c)}</td></tr><tr class="deposit"><td>Amount to Deposit<br><span class="sumformula">Cash</span></td><td>${money(deposit,c)}</td></tr>`}).join('');
+  const totalsHtml=currencies.map(c=>{const cash=num(paid[c]?.cash),bank=num(paid[c]?.bank),total=cash+bank;return `<tr class="section"><td colspan="2">${esc(c)} SUMMARY</td></tr><tr class="grand"><td>Total Summary ${esc(c)}</td><td>${money(total,c)}</td></tr>`}).join('');
   $('summarySheet').innerHTML=`<div class="sumtop"><div class="brand"><h1>BIG BROTHER</h1><p>Ready to be your partner</p></div><div class="meta"><div><strong>Summary Date:</strong> ${new Date().toISOString().slice(0,10)}</div><div><strong>Payment Period:</strong> ${esc(from)}${to!==from?' to '+esc(to):''}</div><div><strong>Location:</strong> ${esc(locLabel)}</div><div><strong>Selected Transactions:</strong> ${picked.length}</div></div></div><div class="divider"></div><div class="sumtitle">PAYMENT SUMMARY</div><table class="sumtable"><thead><tr><th>#</th><th>Payment ID</th><th>Date</th><th>Invoice</th><th>Customer</th><th>Location</th><th>Method</th><th>Transaction ID</th><th>Currency</th><th style="text-align:right">Amount</th></tr></thead><tbody>${picked.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${esc(r.paymentId)}</strong></td><td>${esc(String(r.paymentDate||'').slice(0,10))}</td><td>${esc(r.invoiceNo||((r.allocatedInvoices||[]).join(', '))||'-')}</td><td>${esc(r.customer||'-')}</td><td>${esc(r.locationCode||'-')}</td><td>${esc(r.paymentMethod||'-')}</td><td>${esc(r.transactionId||'-')}</td><td>${esc(r.currency||'')}</td><td style="text-align:right"><strong>${money(r.amount,r.currency)}</strong></td></tr>`).join('')}</tbody></table><table class="sumtotals">${totalsHtml}</table><div class="sumfooter"><span>Sales Payment Summary. Credit is calculated from Credit invoices for the same summary period/location.</span><span>BIG BROTHER</span></div>`
 }
 function printPaymentSummary(){window.print()}
