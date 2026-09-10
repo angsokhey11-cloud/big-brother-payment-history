@@ -9,22 +9,33 @@
 <div class="bb-loader"><div class="bb-card">Loading BIG BROTHER Payment History…<div class="bb-sub">Supabase user permissions</div></div></div>
 <script>
 (async function(){
+  const DASHBOARD='https://angsokhey11-cloud.github.io/big-brother-dashboard/';
   try{
-    const response=await fetch('legacy-google-v6.6.html?v=20260910-2',{cache:'no-store'});
+    const response=await fetch('legacy-google-v6.6.html?v=20260910-3',{cache:'no-store'});
     if(!response.ok)throw new Error('Could not load Payment History source.');
     let html=await response.text();
 
-    const adapter='<scr'+'ipt src="supabase-payment-history-adapter.js?v=20260910-2"></scr'+'ipt>';
+    const adapter='<scr'+'ipt src="supabase-payment-history-adapter.js?v=20260910-3"></scr'+'ipt>';
     const headClose=html.toLowerCase().indexOf('</head>');
     if(headClose<0)throw new Error('Payment History source is missing </head>.');
     html=html.slice(0,headClose)+adapter+'\n'+html.slice(headClose);
 
+    // Remove the old Admin/Salesman secret-code login form from the live page.
+    // Keep only hidden compatibility nodes required by the preserved V6.6 visual functions.
+    const authStart=html.indexOf('<div class="overlay" id="loginOverlay">');
+    const authEnd=authStart>=0?html.indexOf('<script>',authStart):-1;
+    if(authStart<0||authEnd<0)throw new Error('Legacy login block was not found.');
+    const secureAuth='<div class="overlay hidden" id="loginOverlay" style="display:none!important" aria-hidden="true"><div style="display:none!important"><h2 id="loginTitle"></h2><p id="loginText"></p><div id="roleField"><select id="accessRole"><option value="salesman">Salesman</option><option value="admin">Admin</option></select></div><div class="field"><span id="codeLabel"></span><input id="code" type="hidden"></div><label class="remember"><input id="remember" type="hidden"></label><div class="error" id="error"></div></div></div>\n';
+    html=html.slice(0,authStart)+secureAuth+html.slice(authEnd);
+
     const marker='restore();';
     const replacement=`// SUPABASE AUTH CUTOVER
 api=window.BBPaymentHistoryAdapter.api;
+login=async function(){throw new Error('Legacy secret-code sign in has been removed.');};
+restore=async function(){return;};
 logout=async function(){
   await window.BBPaymentHistoryAdapter.signOut();
-  location.reload();
+  try{window.top.location.href='${DASHBOARD}';}catch(_){location.href='${DASHBOARD}';}
 };
 (async function(){
   setup();
@@ -40,23 +51,17 @@ logout=async function(){
       sessionStorage.removeItem('bb_ar_salesman_session');
       localStorage.removeItem('bb_ar_admin_device');
       localStorage.removeItem('bb_ar_salesman_device');
+      localStorage.removeItem('bb_ph_receivable_role');
     }catch(_){}
-    $('loginOverlay').classList.add('hidden');
+    $('loginOverlay')?.remove();
     $('logoutBtn').hidden=false;
     const cached=renderHistoryCache();
     if(cached)await smartSyncHistory(true);else await loadHistory();
     startHistorySmartSync();
   }catch(error){
+    console.error('Payment History Supabase session error:',error);
     sessionToken='';deviceToken='';
-    $('logoutBtn').hidden=true;
-    $('loginOverlay').classList.remove('hidden');
-    $('loginTitle').textContent='🔐 Supabase Sign In Required';
-    $('loginText').textContent='Sign in to BIG BROTHER with an account that has access to this Payment History.';
-    $('roleField').style.display='none';
-    const codeField=$('code')?.closest('.field');if(codeField)codeField.style.display='none';
-    const rememberRow=$('remember')?.closest('.remember');if(rememberRow)rememberRow.style.display='none';
-    const signBtn=$('loginOverlay').querySelector('.btn.primary');if(signBtn)signBtn.style.display='none';
-    err(error?.message||'Payment History access denied.');
+    try{window.top.location.href='${DASHBOARD}';}catch(_){location.href='${DASHBOARD}';}
   }
 })();`;
     if(!html.includes(marker))throw new Error('Payment History initialization marker was not found.');
