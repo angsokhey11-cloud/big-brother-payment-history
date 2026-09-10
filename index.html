@@ -10,17 +10,55 @@
 <script>
 (async function(){
   try{
-    const response=await fetch('legacy-google-v6.6.html?v=20260910-1',{cache:'no-store'});
+    const response=await fetch('legacy-google-v6.6.html?v=20260910-2',{cache:'no-store'});
     if(!response.ok)throw new Error('Could not load Payment History source.');
     let html=await response.text();
 
-    const adapter='<scr'+'ipt src="supabase-payment-history-adapter.js?v=20260910-1"></scr'+'ipt>';
+    const adapter='<scr'+'ipt src="supabase-payment-history-adapter.js?v=20260910-2"></scr'+'ipt>';
     const headClose=html.toLowerCase().indexOf('</head>');
     if(headClose<0)throw new Error('Payment History source is missing </head>.');
     html=html.slice(0,headClose)+adapter+'\n'+html.slice(headClose);
 
-    const marker='restore();\n</script></body></html>';
-    const replacement=`// SUPABASE AUTH CUTOVER\napi=window.BBPaymentHistoryAdapter.api;\nlogout=async function(){\n  await window.BBPaymentHistoryAdapter.signOut();\n  location.reload();\n};\n(async function(){\n  setup();\n  try{\n    await window.BBPaymentHistoryAdapter.ensureSession();\n    const profile=await window.BBPaymentHistoryAdapter.profile();\n    const isAdmin=!!profile?.user?.isAdmin || String(profile?.user?.role||'').toLowerCase()==='admin';\n    ROLE=isAdmin?'admin':'salesman';\n    sessionToken='SUPABASE:'+String(profile?.user?.userId||'user');\n    deviceToken='';\n    try{\n      sessionStorage.removeItem('bb_ar_admin_session');\n      sessionStorage.removeItem('bb_ar_salesman_session');\n      localStorage.removeItem('bb_ar_admin_device');\n      localStorage.removeItem('bb_ar_salesman_device');\n    }catch(_){}\n    $('loginOverlay').classList.add('hidden');\n    $('logoutBtn').hidden=false;\n    const cached=renderHistoryCache();\n    if(cached)await smartSyncHistory(true);else await loadHistory();\n    startHistorySmartSync();\n  }catch(error){\n    sessionToken='';deviceToken='';\n    $('logoutBtn').hidden=true;\n    $('loginOverlay').classList.remove('hidden');\n    $('loginTitle').textContent='🔐 Supabase Sign In Required';\n    $('loginText').textContent='Sign in to BIG BROTHER with an account that has access to this Payment History.';\n    $('roleField').style.display='none';\n    const codeField=$('code')?.closest('.field');if(codeField)codeField.style.display='none';\n    const rememberRow=$('remember')?.closest('.remember');if(rememberRow)rememberRow.style.display='none';\n    const signBtn=$('loginOverlay').querySelector('.btn.primary');if(signBtn)signBtn.style.display='none';\n    err(error?.message||'Payment History access denied.');\n  }\n})();\n</script></body></html>`;
+    const marker='restore();';
+    const replacement=`// SUPABASE AUTH CUTOVER
+api=window.BBPaymentHistoryAdapter.api;
+logout=async function(){
+  await window.BBPaymentHistoryAdapter.signOut();
+  location.reload();
+};
+(async function(){
+  setup();
+  try{
+    await window.BBPaymentHistoryAdapter.ensureSession();
+    const profile=await window.BBPaymentHistoryAdapter.profile();
+    const isAdmin=!!profile?.user?.isAdmin || String(profile?.user?.role||'').toLowerCase()==='admin';
+    ROLE=isAdmin?'admin':'salesman';
+    sessionToken='SUPABASE:'+String(profile?.user?.userId||'user');
+    deviceToken='';
+    try{
+      sessionStorage.removeItem('bb_ar_admin_session');
+      sessionStorage.removeItem('bb_ar_salesman_session');
+      localStorage.removeItem('bb_ar_admin_device');
+      localStorage.removeItem('bb_ar_salesman_device');
+    }catch(_){}
+    $('loginOverlay').classList.add('hidden');
+    $('logoutBtn').hidden=false;
+    const cached=renderHistoryCache();
+    if(cached)await smartSyncHistory(true);else await loadHistory();
+    startHistorySmartSync();
+  }catch(error){
+    sessionToken='';deviceToken='';
+    $('logoutBtn').hidden=true;
+    $('loginOverlay').classList.remove('hidden');
+    $('loginTitle').textContent='🔐 Supabase Sign In Required';
+    $('loginText').textContent='Sign in to BIG BROTHER with an account that has access to this Payment History.';
+    $('roleField').style.display='none';
+    const codeField=$('code')?.closest('.field');if(codeField)codeField.style.display='none';
+    const rememberRow=$('remember')?.closest('.remember');if(rememberRow)rememberRow.style.display='none';
+    const signBtn=$('loginOverlay').querySelector('.btn.primary');if(signBtn)signBtn.style.display='none';
+    err(error?.message||'Payment History access denied.');
+  }
+})();`;
     if(!html.includes(marker))throw new Error('Payment History initialization marker was not found.');
     html=html.replace(marker,replacement);
     html=html.replace('<title>BIG BROTHER - Payment History V6.6 Smart Sync Storage</title>','<title>BIG BROTHER — Payment History Supabase</title>');
