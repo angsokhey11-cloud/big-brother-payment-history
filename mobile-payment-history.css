@@ -1,0 +1,67 @@
+/* BIG BROTHER — Payment History Mobile V1 */
+:root{--bb-blue:#1f5fbf;--bb-navy:#173f77;--bb-bg:#f4f7fb;--bb-line:#dfe6f0;--bb-text:#17304f;--bb-muted:#6c7d91;--bb-green:#198754}
+html,body{background:var(--bb-bg)!important;overflow-x:hidden!important}
+body{padding:0!important;min-width:0!important}
+.wrap{width:100%!important;max-width:none!important;padding:8px 8px 18px!important;margin:0!important}
+.top{display:none!important}
+.cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;margin:0 0 8px!important}
+.card{padding:10px 9px!important;border-radius:11px!important;box-shadow:0 2px 8px rgba(20,48,82,.04)!important;min-width:0!important}
+.card small{font-size:7px!important;line-height:1.1!important;margin-bottom:5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.card strong{font-size:15px!important;line-height:1.1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.panel{border-radius:12px!important;box-shadow:none!important;overflow:visible!important;background:transparent!important;border:0!important}
+.bb-ph-mobile-toolbar{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;margin:0 0 8px}
+.bb-ph-mobile-title{min-width:0;font-size:14px;font-weight:900;color:var(--bb-navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb-ph-tool-btn{min-height:36px;border:1px solid #cbd8e7;border-radius:9px;background:#fff;color:var(--bb-navy);padding:7px 10px;font-size:9px;font-weight:900;white-space:nowrap}
+.bb-ph-summary-btn{background:var(--bb-navy);color:#fff;border-color:var(--bb-navy)}
+.bb-ph-summary-btn:disabled{opacity:.45}
+.filters{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;z-index:3001!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;max-height:88dvh!important;overflow:auto!important;padding:10px 10px calc(12px + env(safe-area-inset-bottom))!important;background:#fff!important;border:1px solid var(--bb-line)!important;border-radius:18px 18px 0 0!important;box-shadow:0 -18px 48px rgba(18,50,86,.18)!important;transform:translateY(110%)!important;transition:transform .22s ease!important}
+.filters.bb-mobile-open{transform:translateY(0)!important}
+.bb-ph-filter-backdrop{display:none;position:fixed;inset:0;z-index:3000;background:rgba(9,27,48,.54)}
+.bb-ph-filter-backdrop.show{display:block}
+.bb-ph-filter-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 1px 8px;border-bottom:1px solid var(--bb-line);margin-bottom:1px}
+.bb-ph-filter-head strong{font-size:17px;color:var(--bb-navy)}
+.bb-ph-filter-head span{display:block;margin-top:2px;color:var(--bb-muted);font-size:9px;font-weight:600}
+.bb-ph-filter-close{width:34px;height:34px;border:0;border-radius:50%;background:#edf2f8;color:var(--bb-navy);font-size:20px;font-weight:900}
+.filters input,.filters select{height:40px!important;padding:0 9px!important;border-radius:9px!important;font-size:10px!important;min-width:0!important}
+#search{grid-column:1/-1!important}
+#location{grid-column:1/-1!important}
+#summaryBtn,#refreshBtn{display:none!important}
+.tablewrap{overflow:visible!important}
+table{display:block!important;width:100%!important;min-width:0!important;border-collapse:separate!important}
+thead{display:none!important}
+#body{display:grid!important;gap:8px!important;width:100%!important}
+#body>tr{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;grid-template-areas:"check id amount" "customer customer customer" "invoice date currency" "location salesperson method" "bank bank transaction" "entered entered approved"!important;gap:6px 8px!important;align-items:center!important;padding:10px!important;border:1px solid var(--bb-line)!important;border-radius:13px!important;background:#fff!important;box-shadow:0 2px 8px rgba(23,63,119,.045)!important;overflow:hidden!important}
+#body>tr>td{display:block!important;padding:0!important;border:0!important;background:transparent!important;font-size:9.5px!important;line-height:1.25!important;min-width:0!important;white-space:normal!important}
+#body>tr>td:nth-child(1){grid-area:check!important}
+#body>tr>td:nth-child(2){grid-area:id!important;font-size:13px!important;font-weight:900!important;color:var(--bb-navy)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#body>tr>td:nth-child(3){grid-area:date!important;color:#60758c!important}
+#body>tr>td:nth-child(4){grid-area:invoice!important;color:#35597f!important;font-weight:800!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#body>tr>td:nth-child(5){grid-area:customer!important;font-size:12px!important;font-weight:900!important;color:var(--bb-text)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#body>tr>td:nth-child(6){grid-area:location!important;color:#60758c!important}
+#body>tr>td:nth-child(7){grid-area:salesperson!important;color:#60758c!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#body>tr>td:nth-child(8){grid-area:method!important;color:#60758c!important;text-align:right!important}
+#body>tr>td:nth-child(9){grid-area:bank!important;color:#60758c!important}
+#body>tr>td:nth-child(10){grid-area:transaction!important;color:#60758c!important;text-align:right!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#body>tr>td:nth-child(11){grid-area:currency!important;justify-self:end!important;color:#60758c!important;font-weight:800!important}
+#body>tr>td:nth-child(12){grid-area:amount!important;text-align:right!important;color:var(--bb-green)!important;font-size:13px!important;font-weight:900!important;white-space:nowrap!important}
+#body>tr>td:nth-child(13){grid-area:entered!important;color:#7a899a!important;font-size:8.5px!important}
+#body>tr>td:nth-child(14){grid-area:approved!important;text-align:right!important;color:#7a899a!important;font-size:8.5px!important}
+#body>tr>td:nth-child(3)::before{content:"Date"}#body>tr>td:nth-child(4)::before{content:"Invoice"}#body>tr>td:nth-child(6)::before{content:"Location"}#body>tr>td:nth-child(7)::before{content:"Salesperson"}#body>tr>td:nth-child(8)::before{content:"Method"}#body>tr>td:nth-child(9)::before{content:"Bank"}#body>tr>td:nth-child(10)::before{content:"Transaction"}#body>tr>td:nth-child(11)::before{content:"Currency"}#body>tr>td:nth-child(13)::before{content:"Entered By"}#body>tr>td:nth-child(14)::before{content:"Approved By"}
+#body>tr>td:nth-child(3)::before,#body>tr>td:nth-child(4)::before,#body>tr>td:nth-child(6)::before,#body>tr>td:nth-child(7)::before,#body>tr>td:nth-child(8)::before,#body>tr>td:nth-child(9)::before,#body>tr>td:nth-child(10)::before,#body>tr>td:nth-child(11)::before,#body>tr>td:nth-child(13)::before,#body>tr>td:nth-child(14)::before{display:block;margin-bottom:2px;color:#8996a5;font-size:6.8px;font-weight:900;text-transform:uppercase}
+.rowcheck{width:18px!important;height:18px!important}
+#body>tr:has(td.empty){display:block!important;padding:24px 10px!important}.empty{display:block!important;text-align:center!important;color:var(--bb-muted)!important;padding:0!important}
+.foot{padding:8px 2px!important;font-size:9px!important;color:var(--bb-muted)!important;background:transparent!important}
+/* Payment summary full-screen + proportional A4 scaling */
+#summaryOverlay{padding:0!important;align-items:stretch!important;background:#eef2f7!important}
+#summaryOverlay:not(.hidden){display:block!important}
+#summaryOverlay .summary-modal{display:flex!important;flex-direction:column!important;width:100%!important;max-width:none!important;height:100dvh!important;max-height:none!important;border-radius:0!important;margin:0!important;padding:0!important;overflow:hidden!important;background:#eef2f7!important;box-shadow:none!important}
+#summaryOverlay .summary-actions{position:relative!important;top:auto!important;flex:0 0 auto!important;display:flex!important;gap:6px!important;overflow-x:auto!important;justify-content:flex-start!important;padding:8px 8px calc(8px + env(safe-area-inset-top))!important;margin:0!important;background:#fff!important;border-bottom:1px solid var(--bb-line)!important;white-space:nowrap!important}
+#summaryOverlay .summary-actions .btn{flex:0 0 auto!important;min-height:38px!important;padding:7px 9px!important;font-size:8.5px!important}
+.bb-ph-summary-scroll{flex:1 1 auto;min-height:0;overflow:auto;padding:6px 6px 18px;background:#eef2f7}
+.bb-ph-summary-stage{position:relative;width:100%;min-height:1px;margin:0 auto;--bb-ph-scale:1}
+#summaryOverlay .a4{position:absolute!important;left:0!important;top:0!important;width:794px!important;min-width:794px!important;max-width:794px!important;min-height:1123px!important;margin:0!important;padding:45px 45px 53px!important;transform:scale(var(--bb-ph-scale))!important;transform-origin:top left!important;box-shadow:none!important}
+#summaryOverlay .a4 *{box-sizing:border-box!important}
+#summaryOverlay .sumtable{display:table!important;width:100%!important;min-width:0!important}#summaryOverlay .sumtable thead{display:table-header-group!important}#summaryOverlay .sumtable tbody{display:table-row-group!important}#summaryOverlay .sumtable tr{display:table-row!important}#summaryOverlay .sumtable th,#summaryOverlay .sumtable td{display:table-cell!important}
+#summaryOverlay .sumtotals{display:table!important}
+@media(max-width:380px){.wrap{padding:6px 6px 16px!important}.card strong{font-size:13px!important}.bb-ph-tool-btn{padding:7px 8px!important;font-size:8px!important}#body>tr{padding:8px!important;gap:5px 6px!important}#body>tr>td:nth-child(12){font-size:12px!important}}
+@media print{.bb-ph-summary-scroll{overflow:visible!important;padding:0!important}.bb-ph-summary-stage{width:auto!important;height:auto!important}.a4{position:static!important;transform:none!important;width:210mm!important;min-width:210mm!important;max-width:none!important}}
