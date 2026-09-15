@@ -43,10 +43,7 @@ logout=async function(){
     await window.BBPaymentHistoryAdapter.ensureSession();
     const profile=await window.BBPaymentHistoryAdapter.profile();
     const isAdmin=!!profile?.user?.isAdmin || String(profile?.user?.role||'').toLowerCase()==='admin';
-    // Receivable Payment History is permission-controlled, not admin-gated.
-    // ROLE='admin' here only selects the company-wide legacy presentation;
-    // authorization is enforced by Supabase module/route permissions.
-    ROLE=TYPE==='receivable'?'admin':(isAdmin?'admin':'salesman');
+    ROLE=isAdmin?'admin':'salesman';
     sessionToken='SUPABASE:'+String(profile?.user?.userId||'user');
     deviceToken='';
     try{
@@ -58,16 +55,6 @@ logout=async function(){
     }catch(_){}
     $('loginOverlay')?.remove();
     $('logoutBtn').hidden=false;
-    if(TYPE==='receivable'){
-      $('title').textContent='Receivable Payment History';
-      $('subtitle').textContent='Company-wide A/R payments · access controlled by BIG BROTHER user permissions.';
-      $('accessPill').textContent='Permission Access';
-      // Receivable rows have no selection-checkbox cell. Keep the matching header hidden
-      // so every desktop heading lines up with its actual data cell.
-      $('selectHead').hidden=true;
-      // Summary selection is invoice-only in the preserved engine.
-      $('summaryBtn').hidden=true;
-    }
     const cached=renderHistoryCache();
     if(cached)await smartSyncHistory(true);else await loadHistory();
     startHistorySmartSync();
