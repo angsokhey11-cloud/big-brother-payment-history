@@ -25,22 +25,34 @@ body{padding:10px 8px 18px}
 .search{width:100%;min-width:0;border:1px solid #cbd7e4;border-radius:8px;padding:8px 9px;font-size:10px;color:var(--text);background:#fff}
 
 .tablewrap{width:100%;overflow:hidden}
-table{width:100%;border-collapse:collapse;table-layout:fixed}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-family:Arial,Helvetica,sans-serif}
 col.date{width:15%}col.invoice{width:23%}col.customer{width:22%}col.location{width:12%}col.method{width:13%}col.amount{width:15%}
 th,td{border-bottom:1px solid #e7edf4;padding:7px 4px;text-align:left;vertical-align:middle}
-th{background:#f7f9fc;color:#60738a;font-size:7.3px;line-height:1.08;font-weight:900;text-transform:uppercase;letter-spacing:.01em}
-td{font-size:8.8px;line-height:1.15;color:var(--text)}
+th{background:#f7f9fc;color:#60738a;font-size:7.5px;line-height:1.1;font-weight:800;text-transform:uppercase;letter-spacing:0}
+td,
+.dateCell,
+.invoiceCell,
+.customerCell,
+.locCell,
+.methodCell,
+.amountCell{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:8.8px;
+  line-height:1.18;
+  font-weight:800;
+}
+td{color:var(--text)}
 tbody tr:nth-child(even){background:#fbfdff}
 tbody tr:active{background:#eef6ff}
 .dateCell,.locCell,.methodCell,.amountCell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dateCell{font-weight:800;color:#58718b;font-size:8.4px}
-.invoiceCell{font-weight:850;color:#315b87;overflow-wrap:anywhere}
-.invoiceCell small{display:block;margin-top:2px;font-size:6.8px;line-height:1.05;color:#7a8b9d;font-weight:700}
-.customerCell{font-weight:900;color:#213d5d;overflow-wrap:anywhere}
-.locCell{font-weight:900;color:#315b87}
-.methodCell{font-weight:800;color:#36566f}
-.amountCell{text-align:right;font-weight:900;color:var(--green);font-size:9.6px}
-.empty{padding:24px 8px;text-align:center;color:var(--muted);font-size:10px}
+.dateCell{color:#58718b}
+.invoiceCell{color:#315b87;overflow-wrap:anywhere}
+.invoiceCell small{display:block;margin-top:2px;font-family:Arial,Helvetica,sans-serif;font-size:7.2px;line-height:1.08;color:#7a8b9d;font-weight:800}
+.customerCell{color:#213d5d;overflow-wrap:anywhere}
+.locCell{color:#315b87}
+.methodCell{color:#36566f}
+.amountCell{text-align:right;color:var(--green)}
+.empty{padding:24px 8px;text-align:center;color:var(--muted);font-size:10px;font-weight:700}
 .foot{padding:8px 10px;color:var(--muted);font-size:8.5px;font-weight:700}
 
 .drawerBackdrop{position:fixed;inset:0;background:rgba(13,33,57,.45);z-index:40;display:none}.drawerBackdrop.show{display:block}
@@ -61,9 +73,8 @@ tbody tr:active{background:#eef6ff}
   .header h1{font-size:16px}.header p{font-size:8px}
   .btn{font-size:9px;padding:7px 8px}
   .kpi{padding:8px 7px}.kpi strong{font-size:13px}.kpi small{font-size:6.5px}
-  th{font-size:6.4px;padding:6px 3px}
-  td{font-size:7.9px;padding:7px 3px}
-  .dateCell{font-size:7.6px}.amountCell{font-size:8.6px}
-  .invoiceCell small{font-size:6px}
+  th{font-size:6.8px;padding:6px 3px}
+  td,.dateCell,.invoiceCell,.customerCell,.locCell,.methodCell,.amountCell{font-size:8px;padding:7px 3px}
+  .invoiceCell small{font-size:6.7px}
   .toolbar{grid-template-columns:minmax(0,1fr) auto auto}
 }
