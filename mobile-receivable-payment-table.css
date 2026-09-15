@@ -1,13 +1,12 @@
-/* BIG BROTHER — Receivable Payment History Mobile Table V3
-   RECEIVABLE rows have 13 cells (no invoice-history checkbox).
-   One receivable payment transaction = exactly one table row. */
+/* BIG BROTHER — Receivable Payment History Mobile Table V4
+   One receivable payment transaction = one row.
+   Show every receivable column on screen with no horizontal scrolling. */
 
 .tablewrap{
   width:100%!important;
   max-width:100%!important;
-  overflow-x:auto!important;
+  overflow-x:hidden!important;
   overflow-y:visible!important;
-  -webkit-overflow-scrolling:touch!important;
   background:#fff!important;
   border:1px solid var(--bb-line)!important;
   border-radius:12px!important;
@@ -16,9 +15,10 @@
 .tablewrap table{
   display:table!important;
   width:100%!important;
-  min-width:720px!important;
+  min-width:0!important;
+  max-width:100%!important;
   border-collapse:collapse!important;
-  table-layout:auto!important;
+  table-layout:fixed!important;
   background:#fff!important;
 }
 .tablewrap thead{display:table-header-group!important}
@@ -34,15 +34,18 @@
 }
 .tablewrap th,.tablewrap td,#body>tr>td{
   display:table-cell!important;
-  padding:8px 7px!important;
+  padding:6px 3px!important;
   border:0!important;
   border-bottom:1px solid #e5ecf3!important;
   background:#fff!important;
-  font-size:9px!important;
-  line-height:1.2!important;
-  white-space:nowrap!important;
+  font-size:6.4px!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
   vertical-align:middle!important;
   min-width:0!important;
+  max-width:none!important;
   color:var(--bb-text)!important;
   text-align:left!important;
 }
@@ -52,62 +55,61 @@
   z-index:2!important;
   background:#f6f9fc!important;
   color:#5d7188!important;
-  font-size:7.5px!important;
+  font-size:5.7px!important;
+  line-height:1.05!important;
   font-weight:900!important;
   text-transform:uppercase!important;
-  letter-spacing:.02em!important;
+  letter-spacing:0!important;
 }
 #body>tr:nth-child(even)>td{background:#fbfdff!important}
 #body>tr:active>td{background:#eef6ff!important}
 #body>tr>td::before{display:none!important;content:none!important}
 
-/* Receivable source has NO checkbox cell.
-   Body cells:
-   1 Payment ID, 2 Date, 3 Invoice, 4 Customer, 5 Location,
-   6 Salesperson, 7 Method, 8 Bank, 9 Transaction ID,
-   10 Currency, 11 Amount, 12 Entered By, 13 Approved By.
-
-   Desktop header still contains the hidden checkbox heading first,
-   therefore header indexes are body index + 1. */
+/* Receivable source has 13 body cells and no checkbox cell.
+   Desktop header still contains the checkbox heading first, so hide it only. */
 #selectHead{display:none!important}
 
-/* Hide secondary fields on mobile. */
-.tablewrap th:nth-child(7),
-.tablewrap th:nth-child(9),
-.tablewrap th:nth-child(11),
-.tablewrap th:nth-child(13),
-.tablewrap th:nth-child(14),
-#body>tr>td:nth-child(6),
-#body>tr>td:nth-child(8),
+/* Show ALL receivable data columns. */
+.tablewrap th:nth-child(n+2),
+#body>tr>td{display:table-cell!important}
+
+/* Header index = body index + 1. Widths total 100%. */
+.tablewrap th:nth-child(2),#body>tr>td:nth-child(1){width:8%!important;font-weight:900!important;color:var(--bb-navy)!important}
+.tablewrap th:nth-child(3),#body>tr>td:nth-child(2){width:8%!important;color:#60758c!important}
+.tablewrap th:nth-child(4),#body>tr>td:nth-child(3){width:11%!important;font-weight:800!important;color:#35597f!important}
+.tablewrap th:nth-child(5),#body>tr>td:nth-child(4){width:10%!important;font-weight:800!important}
+.tablewrap th:nth-child(6),#body>tr>td:nth-child(5){width:7%!important;color:#60758c!important}
+.tablewrap th:nth-child(7),#body>tr>td:nth-child(6){width:8%!important;color:#60758c!important}
+.tablewrap th:nth-child(8),#body>tr>td:nth-child(7){width:6%!important;color:#60758c!important}
+.tablewrap th:nth-child(9),#body>tr>td:nth-child(8){width:7%!important;color:#60758c!important}
+.tablewrap th:nth-child(10),#body>tr>td:nth-child(9){width:9%!important;color:#60758c!important}
+.tablewrap th:nth-child(11),#body>tr>td:nth-child(10){width:5%!important;color:#60758c!important;text-align:center!important}
+.tablewrap th:nth-child(12),#body>tr>td:nth-child(11){width:8%!important;text-align:right!important;color:var(--bb-green)!important;font-size:7px!important;font-weight:900!important}
+.tablewrap th:nth-child(13),#body>tr>td:nth-child(12){width:7%!important;color:#738195!important}
+.tablewrap th:nth-child(14),#body>tr>td:nth-child(13){width:6%!important;color:#738195!important}
+
+/* Keep short values compact where possible. */
+#body>tr>td:nth-child(1),
+#body>tr>td:nth-child(2),
+#body>tr>td:nth-child(5),
+#body>tr>td:nth-child(7),
 #body>tr>td:nth-child(10),
-#body>tr>td:nth-child(12),
-#body>tr>td:nth-child(13){display:none!important}
+#body>tr>td:nth-child(11){white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 
-/* Visible columns:
-   Payment ID | Date | Invoice / Allocation | Customer | Location | Method | Transaction ID | Amount */
-.tablewrap th:nth-child(2),#body>tr>td:nth-child(1){min-width:92px!important;font-weight:900!important;color:var(--bb-navy)!important}
-.tablewrap th:nth-child(3),#body>tr>td:nth-child(2){min-width:72px!important;color:#60758c!important}
-.tablewrap th:nth-child(4),#body>tr>td:nth-child(3){min-width:112px!important;max-width:150px!important;overflow:hidden!important;text-overflow:ellipsis!important;font-weight:800!important;color:#35597f!important}
-.tablewrap th:nth-child(5),#body>tr>td:nth-child(4){min-width:120px!important;max-width:170px!important;overflow:hidden!important;text-overflow:ellipsis!important;font-weight:800!important}
-.tablewrap th:nth-child(6),#body>tr>td:nth-child(5){min-width:68px!important;color:#60758c!important}
-.tablewrap th:nth-child(8),#body>tr>td:nth-child(7){min-width:62px!important;color:#60758c!important}
-.tablewrap th:nth-child(10),#body>tr>td:nth-child(9){min-width:105px!important;max-width:140px!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#60758c!important}
-.tablewrap th:nth-child(12),#body>tr>td:nth-child(11){min-width:88px!important;text-align:right!important;color:var(--bb-green)!important;font-size:10px!important;font-weight:900!important}
-
-/* Empty state: legacy receivable uses colspan=13. */
+/* Empty state remains a clean full-width row. */
 #body>tr.bb-empty-row,#body>tr:has(td.empty){display:table-row!important}
 #body>tr.bb-empty-row>td.empty,#body>tr:has(td.empty)>td.empty{
   display:table-cell!important;
+  width:auto!important;
   text-align:center!important;
   padding:24px 10px!important;
   color:var(--bb-muted)!important;
   white-space:normal!important;
+  font-size:9px!important;
 }
 
-.tablewrap{scrollbar-width:thin!important}
 @media(max-width:390px){
-  .tablewrap table{min-width:680px!important}
-  .tablewrap th,.tablewrap td,#body>tr>td{padding:7px 6px!important;font-size:8.5px!important}
-  .tablewrap th{font-size:7px!important}
-  .tablewrap th:nth-child(12),#body>tr>td:nth-child(11){font-size:9.5px!important}
+  .tablewrap th,.tablewrap td,#body>tr>td{padding:5px 2px!important;font-size:5.8px!important}
+  .tablewrap th{font-size:5.1px!important}
+  .tablewrap th:nth-child(12),#body>tr>td:nth-child(11){font-size:6.4px!important}
 }
