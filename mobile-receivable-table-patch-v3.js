@@ -13,16 +13,23 @@ function apply(){
     link.rel='stylesheet';
     doc.head.appendChild(link);
   }
-  link.href='mobile-receivable-payment-table.css?v=20260915-5';
+  link.href='mobile-receivable-payment-table.css?v=20260915-6';
 
   const wrap=doc.querySelector('.tablewrap');
   const table=wrap?.querySelector('table');
-  if(wrap&&table&&!wrap.querySelector('.bb-rph-grid-head')){
-    const head=doc.createElement('div');
-    head.className='bb-rph-grid-head';
-    head.innerHTML='<div>Payment</div><div>Date</div><div>Invoice / Customer</div><div>Location / Sales</div><div>Method / Bank</div><div>Txn / Amount</div><div>Entered / Approved</div>';
-    wrap.insertBefore(head,table);
+  if(wrap&&table){
+    let head=wrap.querySelector('.bb-rph-grid-head');
+    if(!head){
+      head=doc.createElement('div');
+      head.className='bb-rph-grid-head';
+      wrap.insertBefore(head,table);
+    }
+    head.innerHTML='<div>Payment</div><div>Invoice / Customer</div><div>Location / Sales</div><div>Method / Bank</div><div>Amount / Audit</div>';
   }
+
+  const toolbar=doc.getElementById('bbPhMobileToolbar');
+  const summary=toolbar?.querySelector('[data-bb-summary]');
+  if(summary)summary.style.display='none';
 }
 frame.addEventListener('load',function(){
   setTimeout(apply,80);
