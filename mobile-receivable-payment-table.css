@@ -1,6 +1,7 @@
-/* BIG BROTHER — Receivable Payment History Mobile Table V6
-   One transaction = one row. No horizontal scrolling.
-   All real fields stay visible, grouped into 5 readable mobile columns. */
+/* BIG BROTHER — Receivable Payment History Mobile Table V7
+   Mobile-only presentation.
+   One transaction = one row.
+   Visible columns only: Date, Invoice / Allocation, Customer, Location, Payment Method, Amount. */
 
 .tablewrap{
   width:100%!important;
@@ -11,39 +12,39 @@
   border-radius:12px!important;
   box-shadow:0 2px 8px rgba(23,63,119,.04)!important;
 }
-.tablewrap table{display:block!important;width:100%!important;min-width:0!important;border-collapse:separate!important;table-layout:fixed!important;background:#fff!important}
+.tablewrap table{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  table-layout:fixed!important;
+  background:#fff!important;
+}
 .tablewrap thead{display:none!important}
 .tablewrap tbody,#body{display:block!important;width:100%!important}
 
 .bb-rph-grid-head{
   display:grid!important;
-  grid-template-columns:.95fr 1.35fr 1.2fr 1.05fr 1.45fr!important;
+  grid-template-columns:1.02fr 1.42fr 1.42fr .95fr 1.02fr 1fr!important;
   width:100%!important;
   background:#f6f9fc!important;
   border-bottom:1px solid #dfe7ef!important;
 }
 .bb-rph-grid-head>div{
   min-width:0!important;
-  padding:8px 6px!important;
+  padding:8px 5px!important;
   color:#60738a!important;
-  font-size:8px!important;
+  font-size:8.5px!important;
   line-height:1.15!important;
   font-weight:900!important;
   text-transform:uppercase!important;
-  letter-spacing:.02em!important;
+  letter-spacing:.01em!important;
   white-space:normal!important;
 }
 .bb-rph-grid-head>div:last-child{text-align:right!important}
 
 #body>tr{
   display:grid!important;
-  grid-template-columns:.95fr 1.35fr 1.2fr 1.05fr 1.45fr!important;
-  grid-template-rows:auto auto auto!important;
-  grid-template-areas:
-    "pid invoice location method amount"
-    "date customer sales bank txn"
-    "date customer sales bank audit"!important;
-  align-items:center!important;
+  grid-template-columns:1.02fr 1.42fr 1.42fr .95fr 1.02fr 1fr!important;
   width:100%!important;
   min-width:0!important;
   padding:0!important;
@@ -53,59 +54,56 @@
   background:#fff!important;
   box-shadow:none!important;
   overflow:hidden!important;
+  align-items:center!important;
 }
 #body>tr:nth-child(even){background:#fbfdff!important}
 #body>tr:active{background:#eef6ff!important}
+
 #body>tr>td{
-  display:block!important;
+  display:none!important;
   min-width:0!important;
-  padding:4px 6px!important;
+  padding:7px 5px!important;
   border:0!important;
   background:transparent!important;
   color:var(--bb-text)!important;
-  font-size:9px!important;
-  line-height:1.18!important;
+  font-size:9.5px!important;
+  line-height:1.2!important;
   white-space:normal!important;
-  overflow:visible!important;
-  text-overflow:clip!important;
-  text-align:left!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
   overflow-wrap:anywhere!important;
+  text-align:left!important;
 }
 #body>tr>td::before{display:none!important;content:none!important}
 
-#body>tr>td:nth-child(1){grid-area:pid!important;font-weight:900!important;color:var(--bb-navy)!important;font-size:10px!important;white-space:nowrap!important}
-#body>tr>td:nth-child(2){grid-area:date!important;color:#60758c!important;font-size:8px!important;font-weight:800!important}
-#body>tr>td:nth-child(3){grid-area:invoice!important;color:#315b87!important;font-weight:900!important;line-height:1.08!important}
-#body>tr>td:nth-child(4){grid-area:customer!important;font-weight:900!important;color:#213d5d!important}
-#body>tr>td:nth-child(5){grid-area:location!important;color:#315b87!important;font-weight:900!important;font-size:10px!important}
-#body>tr>td:nth-child(6){grid-area:sales!important;color:#6f8092!important;font-size:7.7px!important}
-#body>tr>td:nth-child(7){grid-area:method!important;color:#36566f!important}
-#body>tr>td:nth-child(8){grid-area:bank!important;color:#7a8998!important;font-size:7.7px!important}
-#body>tr>td:nth-child(9){grid-area:txn!important;text-align:right!important;color:#5f7286!important;font-size:7.7px!important}
-#body>tr>td:nth-child(10){grid-area:amount!important;justify-self:start!important;text-align:left!important;color:#7a8998!important;font-size:6.8px!important;font-weight:900!important}
-#body>tr>td:nth-child(11){grid-area:amount!important;justify-self:end!important;text-align:right!important;color:var(--bb-green)!important;font-size:10px!important;font-weight:900!important;padding-right:7px!important}
-#body>tr>td:nth-child(12){grid-area:audit!important;text-align:right!important;color:#5f7286!important;font-size:7.2px!important;padding-top:2px!important}
-#body>tr>td:nth-child(13){grid-area:audit!important;text-align:right!important;color:#7a8998!important;font-size:7.2px!important;padding-top:14px!important}
+/* Receivable body column map:
+   1 Payment ID, 2 Date, 3 Invoice/Allocation, 4 Customer, 5 Location,
+   6 Salesperson, 7 Method, 8 Bank, 9 Transaction ID, 10 Currency,
+   11 Amount, 12 Entered By, 13 Approved By. */
+#body>tr>td:nth-child(2),
+#body>tr>td:nth-child(3),
+#body>tr>td:nth-child(4),
+#body>tr>td:nth-child(5),
+#body>tr>td:nth-child(7),
+#body>tr>td:nth-child(11){display:block!important}
 
-#body>tr>td:nth-child(4)::before,#body>tr>td:nth-child(6)::before,#body>tr>td:nth-child(8)::before,#body>tr>td:nth-child(9)::before,#body>tr>td:nth-child(10)::before,#body>tr>td:nth-child(12)::before,#body>tr>td:nth-child(13)::before{
-  display:inline!important;
-  margin-right:3px!important;
-  color:#9aa6b3!important;
-  font-size:5.8px!important;
-  font-weight:900!important;
-  text-transform:uppercase!important;
-}
-#body>tr>td:nth-child(4)::before{content:"Cust "!important}
-#body>tr>td:nth-child(6)::before{content:"Sales "!important}
-#body>tr>td:nth-child(8)::before{content:"Bank "!important}
-#body>tr>td:nth-child(9)::before{content:"Txn "!important}
-#body>tr>td:nth-child(10)::before{content:"Cur "!important}
-#body>tr>td:nth-child(12)::before{content:"In "!important}
-#body>tr>td:nth-child(13)::before{content:"Appr "!important}
+#body>tr>td:nth-child(2){font-weight:800!important;color:#556f89!important;white-space:nowrap!important;font-size:9.2px!important}
+#body>tr>td:nth-child(3){font-weight:850!important;color:#315b87!important;font-size:9.2px!important;line-height:1.12!important}
+#body>tr>td:nth-child(4){font-weight:900!important;color:#213d5d!important;font-size:9.5px!important}
+#body>tr>td:nth-child(5){font-weight:900!important;color:#315b87!important;white-space:nowrap!important;font-size:9.5px!important}
+#body>tr>td:nth-child(7){font-weight:800!important;color:#36566f!important;white-space:nowrap!important;font-size:9px!important}
+#body>tr>td:nth-child(11){font-weight:900!important;color:var(--bb-green)!important;text-align:right!important;white-space:nowrap!important;font-size:10px!important;padding-right:7px!important}
 
-#body>tr>td:nth-child(3) small{font-size:6.8px!important;line-height:1.05!important;color:#6e8195!important}
+#body>tr>td:nth-child(3) small{font-size:7.2px!important;line-height:1.05!important;color:#6e8195!important}
+
 #body>tr.bb-empty-row,#body>tr:has(td.empty){display:block!important;padding:22px 8px!important}
-#body>tr.bb-empty-row>td.empty,#body>tr:has(td.empty)>td.empty{display:block!important;text-align:center!important;padding:0!important;white-space:normal!important;color:var(--bb-muted)!important}
+#body>tr.bb-empty-row>td.empty,#body>tr:has(td.empty)>td.empty{
+  display:block!important;
+  text-align:center!important;
+  padding:0!important;
+  white-space:normal!important;
+  color:var(--bb-muted)!important;
+}
 
 .bb-ph-mobile-toolbar{grid-template-columns:minmax(0,1fr) auto auto!important;gap:5px!important}
 .bb-ph-mobile-title{font-size:14px!important;line-height:1.1!important}
@@ -114,9 +112,14 @@
 .card strong{font-size:14px!important}
 
 @media(max-width:390px){
-  .bb-rph-grid-head,#body>tr{grid-template-columns:.9fr 1.35fr 1.18fr 1fr 1.38fr!important}
-  .bb-rph-grid-head>div{padding:7px 4px!important;font-size:7.2px!important}
-  #body>tr>td{padding:4px!important;font-size:8.4px!important}
-  #body>tr>td:nth-child(1),#body>tr>td:nth-child(5),#body>tr>td:nth-child(11){font-size:9.2px!important}
-  #body>tr>td:nth-child(2),#body>tr>td:nth-child(6),#body>tr>td:nth-child(8),#body>tr>td:nth-child(9),#body>tr>td:nth-child(12),#body>tr>td:nth-child(13){font-size:6.9px!important}
+  .bb-rph-grid-head,#body>tr{
+    grid-template-columns:.98fr 1.35fr 1.32fr .9fr .98fr .92fr!important;
+  }
+  .bb-rph-grid-head>div{padding:7px 4px!important;font-size:7.4px!important}
+  #body>tr>td{padding:7px 4px!important;font-size:8.7px!important}
+  #body>tr>td:nth-child(2){font-size:8.4px!important}
+  #body>tr>td:nth-child(3){font-size:8.4px!important}
+  #body>tr>td:nth-child(4),#body>tr>td:nth-child(5){font-size:8.8px!important}
+  #body>tr>td:nth-child(7){font-size:8.3px!important}
+  #body>tr>td:nth-child(11){font-size:9.2px!important}
 }
