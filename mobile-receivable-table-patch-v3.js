@@ -13,7 +13,7 @@ function apply(){
     link.rel='stylesheet';
     doc.head.appendChild(link);
   }
-  link.href='mobile-receivable-payment-table.css?v=20260915-6';
+  link.href='mobile-receivable-payment-table.css?v=20260915-7';
 
   const wrap=doc.querySelector('.tablewrap');
   const table=wrap?.querySelector('table');
@@ -24,7 +24,7 @@ function apply(){
       head.className='bb-rph-grid-head';
       wrap.insertBefore(head,table);
     }
-    head.innerHTML='<div>Payment</div><div>Invoice / Customer</div><div>Location / Sales</div><div>Method / Bank</div><div>Amount / Audit</div>';
+    head.innerHTML='<div>Date</div><div>Invoice / Allocation</div><div>Customer</div><div>Location</div><div>Payment Method</div><div>Amount</div>';
   }
 
   const toolbar=doc.getElementById('bbPhMobileToolbar');
