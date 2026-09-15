@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f7fb">
+<title>BIG BROTHER — Receivable Payment History Mobile</title>
+<link rel="stylesheet" href="receivable-mobile.css?v=20260915-clean1">
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <h1>Receivable Payment History</h1>
+      <p>BIG BROTHER · mobile</p>
+    </div>
+    <div class="actions">
+      <button class="btn secondary" id="backBtn" type="button">Back</button>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><small>Records</small><strong id="count">0</strong></div>
+    <div class="kpi"><small>Total USD</small><strong id="usd">$0.00</strong></div>
+    <div class="kpi"><small>Total KHR</small><strong id="khr">៛0</strong></div>
+  </div>
+
+  <div class="panel">
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Search customer or invoice">
+      <button class="btn secondary" id="filterBtn" type="button">Filters</button>
+      <button class="btn secondary" id="refreshBtn" type="button">↻</button>
+    </div>
+
+    <div class="tablewrap">
+      <table aria-label="Receivable payment history">
+        <colgroup>
+          <col class="date"><col class="invoice"><col class="customer"><col class="location"><col class="method"><col class="amount">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Invoice / Allocation</th>
+            <th>Customer</th>
+            <th>Location</th>
+            <th>Payment Method</th>
+            <th style="text-align:right">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="body"><tr><td colspan="6" class="empty">Loading payment history…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="foot" id="foot">0 records</div>
+  </div>
+</div>
+
+<div class="drawerBackdrop" id="drawerBackdrop"></div>
+<div class="drawer" id="drawer" aria-label="Payment filters">
+  <div class="drawerHead"><strong>Filters</strong></div>
+  <div class="drawerGrid">
+    <div><label>Location</label><select id="locationFilter"><option value="">All locations</option></select></div>
+    <div><label>Payment Method</label><select id="methodFilter"><option value="">All methods</option><option value="Cash">Cash</option><option value="Bank">Bank</option></select></div>
+    <div><label>Date From</label><input id="dateFrom" type="date"></div>
+    <div><label>Date To</label><input id="dateTo" type="date"></div>
+  </div>
+  <div class="drawerActions">
+    <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+    <button class="btn primary" id="doneBtn" type="button">Done</button>
+  </div>
+</div>
+
+<div class="boot" id="boot"><div class="bootCard" id="bootCard">Loading Receivable Payment History<span>Checking BIG BROTHER permission and payment records</span></div></div>
+<script src="receivable-mobile.js?v=20260915-clean1"></script>
+</body>
+</html>
