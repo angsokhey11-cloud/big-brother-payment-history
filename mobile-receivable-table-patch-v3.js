@@ -13,7 +13,7 @@ function apply(){
     link.rel='stylesheet';
     doc.head.appendChild(link);
   }
-  link.href='mobile-receivable-payment-table.css?v=20260915-3';
+  link.href='mobile-receivable-payment-table.css?v=20260915-4';
 }
 frame.addEventListener('load',function(){
   setTimeout(apply,80);
