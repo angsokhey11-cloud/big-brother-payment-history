@@ -78,3 +78,6 @@ tbody tr:active{background:#eef6ff}
   .invoiceCell small{font-size:6.7px}
   .toolbar{grid-template-columns:minmax(0,1fr) auto auto}
 }
+
+/* Khmer glyph clarity without changing the existing component layout. */
+html,body,input,select,textarea,td,.card{font-family:Arial,Helvetica,'Noto Sans Khmer',sans-serif!important}
