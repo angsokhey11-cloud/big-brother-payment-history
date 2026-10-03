@@ -65,3 +65,6 @@ thead{display:none!important}
 #summaryOverlay .sumtotals{display:table!important}
 @media(max-width:380px){.wrap{padding:6px 6px 16px!important}.card strong{font-size:13px!important}.bb-ph-tool-btn{padding:7px 8px!important;font-size:8px!important}#body>tr{padding:8px!important;gap:5px 6px!important}#body>tr>td:nth-child(12){font-size:12px!important}}
 @media print{.bb-ph-summary-scroll{overflow:visible!important;padding:0!important}.bb-ph-summary-stage{width:auto!important;height:auto!important}.a4{position:static!important;transform:none!important;width:210mm!important;min-width:210mm!important;max-width:none!important}}
+
+/* Khmer glyph clarity without changing the existing component layout. */
+html,body,input,select,textarea,td,.card{font-family:Arial,Helvetica,'Noto Sans Khmer',sans-serif!important}
