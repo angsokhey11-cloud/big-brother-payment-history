@@ -28,6 +28,14 @@ async function assertPermission(){
   if(!grant||grant.canView!==true)throw new Error('You do not have permission to view Receivable Payment History.');
 }
 
+function historyDisplayDate(value){
+ const raw=String(value??'').trim(),m=raw.match(/^(\d{4})-(\d{2})-(\d{2})(?=$|T|\s)/);
+ const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+ if(!raw)return '-';
+ if(m){const mon=Number(m[2]),day=Number(m[3]);if(mon>=1&&mon<=12&&day>=1&&day<=31)return m[3]+'-'+months[mon-1]+'-'+m[1];}
+ const date=new Date(value);
+ return Number.isNaN(date.getTime())?raw:date.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Phnom_Penh'}).replace(/ /g,'-');
+}
 function invoiceText(r){
   const allocated=Array.isArray(r.allocatedInvoices)?r.allocatedInvoices.filter(Boolean):[];
   if(Number(r.allocationCount||0)>0||allocated.length){
@@ -68,7 +76,7 @@ function render(){
   if(!filtered.length){$('body').innerHTML='<tr><td colspan="6" class="empty">No receivable payment records found.</td></tr>';return}
 
   $('body').innerHTML=filtered.map(r=>`<tr>
-    <td class="dateCell">${esc(String(r.paymentDate||'').slice(0,10)||'-')}</td>
+    <td class="dateCell">${esc(historyDisplayDate(r.paymentDate))}</td>
     <td class="invoiceCell">${invoiceText(r)}</td>
     <td class="customerCell">${esc(r.customer||'-')}</td>
     <td class="locCell">${esc(r.locationCode||'-')}</td>
